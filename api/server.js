@@ -1,9 +1,19 @@
 const express = require('express'); // importing a CommonJS module
 const helmet = require('helmet');
-const cors = require('cors')
-const server = express();
-const session = require('express-session')
-// const KnexSessionStore = require('connect-session-knex')(session) 
+const cors = require('cors');
+const session = require('express-session');
+const { ApolloServer } = require('apollo-server-express');
+
+const app = express();
+
+//global middleware
+app.use(express.json());
+app.use(helmet());
+app.use(logger);
+app.use(cors());
+// server.use(session(sessionConfig))
+
+// const KnexSessionStore = require('connect-session-knex')(session)
 
 // const sessionConfig = {
 //   name: 'Leedle', //default is server ID.. changing it protects hackers from knowing what library you are using
@@ -23,23 +33,44 @@ const session = require('express-session')
 //       clearInterval: 1000 * 60 * 60
 //     }),
 // }
-//global middleware
-server.use(express.json());
-server.use(helmet());
-server.use(logger)
-server.use(cors())
-// server.use(session(sessionConfig))
 
+const schema = `
+  type Query {
+    greet: String!,
+    users :[User],
+  }
 
-server.get('/', (req, res) => {
-  res.status(200).json({message: 'server is working'})
-});
-
-async function logger(req, res, next) {
-  console.log(`${req.method} was requested at ${req.url} on [${new Date().toISOString()}]`)
-  next();
+  type User {
+    id:String,
+    email:String,
+    password:String,
+    companyId:String
+  }
+`;
+const resolvers = {
+  Query: {
+    greet: () => {
+      return 'Hello from GraphQl side';
+    },
+    users: () => {
+      return fetchData();
+    },
+  },
 };
 
+const server = new ApolloServer({ typeDefs: schema, resolvers });
 
+server.applyMiddleware({ app, path: '/graphql' });
 
-module.exports = server;
+// app.get('/', (req, res) => {
+//   res.status(200).json({ message: 'server is working' });
+// });
+
+async function logger(req, res, next) {
+  console.log(
+    `${req.method} was requested at ${req.url} on [${new Date().toISOString()}]`
+  );
+  next();
+}
+
+module.exports = app;

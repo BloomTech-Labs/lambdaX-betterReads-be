@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Lambda-School-Labs/lambdaX-betterReads-be#readme",
   "dependencies": {
+    "apollo-server-express": "^2.10.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
