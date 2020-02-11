@@ -71,7 +71,6 @@ To get the server running locally:
 ```
 
 #### USERS
-
 ---
 
 ```
