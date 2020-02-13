@@ -3,6 +3,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
 const { ApolloServer } = require('apollo-server-express');
+const logger = require('./middleware/logger');
 
 const app = express();
 
@@ -62,15 +63,8 @@ const server = new ApolloServer({ typeDefs: schema, resolvers });
 
 server.applyMiddleware({ app, path: '/graphql' });
 
-// app.get('/', (req, res) => {
-//   res.status(200).json({ message: 'server is working' });
-// });
-
-async function logger(req, res, next) {
-  console.log(
-    `${req.method} was requested at ${req.url} on [${new Date().toISOString()}]`
-  );
-  next();
-}
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'server is working' });
+});
 
 module.exports = app;
