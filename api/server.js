@@ -2,19 +2,12 @@ const express = require('express'); // importing a CommonJS module
 const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
 const logger = require('./middleware/logger');
+const typeDefs = require('./schema/schema');
+const resolvers = require('./resolvers/resolvers');
 
-const app = express();
-
-//global middleware
-app.use(express.json());
-app.use(helmet());
-app.use(logger);
-app.use(cors());
-// server.use(session(sessionConfig))
-
-// const KnexSessionStore = require('connect-session-knex')(session)
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 // const sessionConfig = {
 //   name: 'Leedle', //default is server ID.. changing it protects hackers from knowing what library you are using
@@ -35,31 +28,18 @@ app.use(cors());
 //     }),
 // }
 
-const schema = `
-  type Query {
-    greet: String!,
-    users :[User],
-  }
+const app = express();
 
-  type User {
-    id:String,
-    email:String,
-    password:String,
-    companyId:String
-  }
-`;
-const resolvers = {
-  Query: {
-    greet: () => {
-      return 'Hello from GraphQl side';
-    },
-    users: () => {
-      return fetchData();
-    },
-  },
-};
+//global middleware
+app.use(express.json());
+app.use(helmet());
+app.use(logger);
+app.use(cors());
 
-const server = new ApolloServer({ typeDefs: schema, resolvers });
+// app.use(session(sessionConfig))
+// const KnexSessionStore = require('connect-session-knex')(session)
+
+const server = new ApolloServer({ schema });
 
 server.applyMiddleware({ app, path: '/graphql' });
 
