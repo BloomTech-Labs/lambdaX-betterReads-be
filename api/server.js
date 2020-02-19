@@ -6,7 +6,7 @@ const { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
 const logger = require('./middleware/logger');
 const typeDefs = require('./schema/schema');
 const resolvers = require('./resolvers/resolvers');
-
+const { ExpressOIDC } = require('@okta/oidc-middleware');
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 // const sessionConfig = {
@@ -36,8 +36,26 @@ app.use(helmet());
 app.use(logger);
 app.use(cors());
 
-// app.use(session(sessionConfig))
-// const KnexSessionStore = require('connect-session-knex')(session)
+// session support is required to use ExpressOIDC
+app.use(session({
+  secret: 'this should be secure',
+  resave: true,
+  saveUninitialized: false
+}));
+
+const oidc = new ExpressOIDC({
+  issuer: 'https://dev-640497.okta.com',
+  client_id: '0oa274tam6nSE47LW4x6',
+  client_secret: '0oa274tam6nSE47LW4x6',
+  redirect_uri: 'http://localhost:3000/authorize/callback',
+  scope: 'openid profile',
+  appBaseUrl: 'http://localhost:3000'
+});
+
+// ExpressOIDC will attach handlers for the /login and /authorization-code/callback routes
+app.use(oidc.router);
+
+
 
 const server = new ApolloServer({ schema });
 
