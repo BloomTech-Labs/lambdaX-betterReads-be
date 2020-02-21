@@ -65,4 +65,12 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'server is working' });
 });
 
+oidc.on('ready', () => {
+  app.listen(3000, () => console.log(`Started!`));
+});
+
+oidc.on('error', err => {
+  console.log('Unable to configure ExpressOIDC', err);
+});
+
 module.exports = app;
