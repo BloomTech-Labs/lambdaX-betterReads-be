@@ -55,8 +55,6 @@ const oidc = new ExpressOIDC({
 // ExpressOIDC will attach handlers for the /login and /authorization-code/callback routes
 app.use(oidc.router);
 
-
-
 const server = new ApolloServer({ schema });
 
 server.applyMiddleware({ app, path: '/graphql' });
