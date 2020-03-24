@@ -3,10 +3,10 @@ const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
 const { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
+const oidc = require('./auth');
 const logger = require('./middleware/logger');
 const typeDefs = require('./schema/schema');
 const resolvers = require('./resolvers/resolvers');
-const { ExpressOIDC } = require('@okta/oidc-middleware');
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 // const sessionConfig = {
@@ -43,15 +43,6 @@ app.use(session({
   saveUninitialized: false
 }));
 
-const oidc = new ExpressOIDC({
-  issuer: 'https://dev-640497.okta.com',
-  client_id: '0oa274tam6nSE47LW4x6',
-  client_secret: '0oa274tam6nSE47LW4x6',
-  redirect_uri: 'http://localhost:3000/authorize/callback',
-  scope: 'openid profile',
-  appBaseUrl: 'http://localhost:3000'
-});
-
 // ExpressOIDC will attach handlers for the /login and /authorization-code/callback routes
 app.use(oidc.router);
 
@@ -61,14 +52,6 @@ server.applyMiddleware({ app, path: '/graphql' });
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'server is working' });
-});
-
-oidc.on('ready', () => {
-  app.listen(3000, () => console.log(`Started!`));
-});
-
-oidc.on('error', err => {
-  console.log('Unable to configure ExpressOIDC', err);
 });
 
 module.exports = app;
