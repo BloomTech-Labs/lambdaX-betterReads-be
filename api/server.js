@@ -1,12 +1,9 @@
 const express = require('express'); // importing a CommonJS module
 const helmet = require('helmet');
 const cors = require('cors');
-const session = require('express-session');
-const { ApolloServer, makeExecutableSchema } = require('apollo-server-express');
 const logger = require('./middleware/logger');
 const oktaClient = require('../lib/oktaClient');
 const tempDb = require('../temp-db');
-const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const app = express();
 
