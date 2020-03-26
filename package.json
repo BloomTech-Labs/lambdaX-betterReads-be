@@ -20,18 +20,15 @@
   },
   "homepage": "https://github.com/Lambda-School-Labs/lambdaX-betterReads-be#readme",
   "dependencies": {
-    "@okta/oidc-middleware": "^3.0.0",
-    "apollo-server-express": "^2.10.0",
+    "@okta/okta-sdk-nodejs": "^3.2.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
-    "helmet": "^3.21.2",
-    "install": "^0.13.0",
+    "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.20.9",
-    "npm": "^6.13.7",
+    "knex": "^0.20.13",
     "sqlite3": "^4.1.1"
   },
   "devDependencies": {
