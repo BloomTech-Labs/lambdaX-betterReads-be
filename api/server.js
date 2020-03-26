@@ -18,7 +18,7 @@ app.get('/', (req, res, next) => {
   res.status(200).json(tempDb);
 });
 
-app.post('/', (req, res, next) => {
+app.post('/register', (req, res, next) => {
   if (!req.body) {
     return res.status(400);
   }
