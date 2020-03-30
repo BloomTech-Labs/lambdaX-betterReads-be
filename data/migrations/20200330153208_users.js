@@ -2,7 +2,7 @@
 exports.up = function(knex, Promise) {
     return knex.schema.createTable('users', tbl => {
   
-      //primary key column
+      //primary key columns
       tbl.increments()
   
       //username column
@@ -17,7 +17,6 @@ exports.up = function(knex, Promise) {
       .string('password', 128)
       .notNullable()
     })
-  
   };
   exports.down = function(knex, Promise) {
     return knex.schema.destroyTableIfExists('users');
