@@ -4,6 +4,7 @@ const cors = require('cors');
 const logger = require('./middleware/logger');
 const oktaClient = require('../lib/oktaClient');
 const tempDb = require('../temp-db');
+const bcrypt = require('bcryptjs'); // 
 
 const app = express();
 
@@ -19,23 +20,29 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/register', (req, res, next) => {
+  let user = req.body // user = to content user sends
+  const hash = bcrypt.hashSync(user.password, 10) // hashes password sent 2 ^ 10th power times
+  user.password = hash // password set = to this new hashed value
+
   if (!req.body) {
     return res.status(400);
   }
 
   const newUser = {
     profile: {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      login: req.body.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      login: user.email,
     },
     credentials: {
       password: {
-        value: req.body.password,
+        value: user.password,
       },
     },
   };
+
+
 
   oktaClient
     .createUser(newUser)
