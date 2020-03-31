@@ -1,5 +1,5 @@
 
-//importing knex from depenencies
+//importing knex from dependencies
 const knex = require('knex')
 
 //importing knex file
