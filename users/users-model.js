@@ -11,15 +11,15 @@ module.exports = {
 }
 
 function findUsers(department) { //returns users table and selects id, username, and password columns to return
-    return db('users').where({department: department}).select('id', 'username', 'password')
+    return db('users').where({department: department}).select('id', 'email', 'password')
 }
 
 function find() { //returns users table and selects id, username, and password columns to return
-    return db('users').select('id', 'username', 'password')
+    return db('users').select('id', 'email', 'password')
 }
 
 function findAll() { //returns users table and selects id, username, and password columns to return
-    return db('users').select('id', 'username', 'password')
+    return db('users').select('id', 'email', 'password')
 }
 
 function findBy(filter) { //returns users where the username = username
@@ -49,10 +49,10 @@ function findById(id) {
 
 }
 
-async function add(user) {
-    await db('users').insert(user); //inserts user and sets it == to id
+async function add(storeUser) {
+    await db('users').insert(storeUser); //inserts user and sets it == to id
   
-    return findBy({email: user.profile.email}); //returns the user that was created 
+    return findBy({email: storeUser.email}); //returns the user that was created 
   }
 
   function remove(id) {

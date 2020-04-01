@@ -16,13 +16,17 @@ app.use(cors());
 
 // enpoints need to be moved into routes
 app.get('/', (req, res, next) => {
-  res.status(200).json(tempDb);
+  Users.find(req.body)
+    .then( users => {
+        res.status(200).json({users})
+    })
+    .catch(err => res.status(500).json({message: err}))
 });
 
 app.post('/register', (req, res, next) => {
   let user = req.body // user = to content user sends
-  // const hash = bcrypt.hashSync(user.password, 10) // hashes password sent 2 ^ 10th power times
-  // user.password = hash // password set = to this new hashed value
+  const hash = bcrypt.hashSync(user.password, 10) // hashes password sent 2 ^ 10th power times
+  user.password = hash // password set = to this new hashed value
 
   if (!req.body) {
     return res.status(400);
@@ -42,7 +46,10 @@ app.post('/register', (req, res, next) => {
     },
   };
 
-
+const storeUser = {
+  "email" : user.email,
+  "password" : user.password
+}
 
   oktaClient
     .createUser(newUser)
@@ -60,7 +67,7 @@ app.post('/register', (req, res, next) => {
       res.status(400).json({ err });
     });
 
-    Users.add(newUser) 
+    Users.add(storeUser) 
     .then(newUser => {
         res.status(201).json({newUser})// adds new user to db
     })
