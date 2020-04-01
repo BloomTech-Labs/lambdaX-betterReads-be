@@ -5,7 +5,7 @@ const logger = require('./middleware/logger');
 const oktaClient = require('../lib/oktaClient');
 const tempDb = require('../temp-db');
 const bcrypt = require('bcryptjs'); // 
-
+const Users = require('../users/users-model.js')
 const app = express();
 
 // global middleware
@@ -21,8 +21,8 @@ app.get('/', (req, res, next) => {
 
 app.post('/register', (req, res, next) => {
   let user = req.body // user = to content user sends
-  const hash = bcrypt.hashSync(user.password, 10) // hashes password sent 2 ^ 10th power times
-  user.password = hash // password set = to this new hashed value
+  // const hash = bcrypt.hashSync(user.password, 10) // hashes password sent 2 ^ 10th power times
+  // user.password = hash // password set = to this new hashed value
 
   if (!req.body) {
     return res.status(400);
@@ -47,17 +47,26 @@ app.post('/register', (req, res, next) => {
   oktaClient
     .createUser(newUser)
     .then(user => {
+      console.log('new user created', newUser)
       // tempDb is just an object. 
       // TODO: Create actual db/migrations and decide what parts
       // of the okta User model we want to store in our database.
       // (probably everything other than User._links)
-      tempDb.users[user.id] = user;
-      res.status(201).json({ user });
+      // tempDb.users[user.id] = user;
+      // res.status(201).json({ user });
     })
     .catch(err => {
       console.log('ERROR: ', err);
       res.status(400).json({ err });
     });
+
+    Users.add(newUser) 
+    .then(newUser => {
+        res.status(201).json({newUser})// adds new user to db
+    })
+    .catch(err => {
+        res.status(500).json({message: err})
+    })
 });
 
 module.exports = app;

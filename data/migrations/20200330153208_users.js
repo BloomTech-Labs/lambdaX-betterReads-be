@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
   
       //username column
       tbl
-      .string('username', 128)
+      .string('email', 128)
       .notNullable()
       .unique()
  
