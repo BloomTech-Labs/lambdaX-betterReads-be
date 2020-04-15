@@ -1,38 +1,36 @@
 {
-  "name": "lambdaX-betterReads-be",
-  "version": "1.0.0",
-  "description": "🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.",
-  "main": "index.js",
+  "name": "lambdax-better-reads-be",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node dist/server",
+    "clean": "rm -rf dist",
+    "build": "npm -s run clean && npm -s run generate && tsc",
+    "generate": "npm -s run generate:prisma && npm -s run generate:nexus",
+    "generate:prisma": "prisma generate",
+    "generate:nexus": "ts-node --transpile-only src/schema",
+    "postinstall": "npm -s run generate",
+    "dev": "ts-node-dev --no-notify --respawn --transpileOnly src/server"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Lambda-School-Labs/lambdaX-betterReads-be.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Lambda-School-Labs/lambdaX-betterReads-be/issues"
-  },
-  "homepage": "https://github.com/Lambda-School-Labs/lambdaX-betterReads-be#readme",
   "dependencies": {
-    "@okta/okta-sdk-nodejs": "^3.2.0",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-session": "^1.17.0",
-    "helmet": "^3.22.0",
-    "jsonwebtoken": "^8.5.1",
-    "knex": "^0.20.13",
-    "pg": "^8.0.0",
-    "sqlite3": "^4.1.1"
+    "@nexus/schema": "0.13.1",
+    "@prisma/client": "2.0.0-beta.2",
+    "@types/node-fetch": "2.5.5",
+    "apollo-server": "2.12.0",
+    "graphql": "14.6.0",
+    "nexus-prisma": "0.12.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "@prisma/cli": "2.0.0-beta.2",
+    "@types/node": "12.12.35",
+    "ts-node": "8.8.2",
+    "ts-node-dev": "1.0.0-pre.44",
+    "typescript": "3.8.3"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": true,
+    "trailingComma": "none"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
