@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Lambda-School-Labs/lambdaX-betterReads-be#readme",
   "dependencies": {
-    "@okta/okta-sdk-nodejs": "^3.2.0",
+    "@okta/okta-sdk-nodejs": "^3.3.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
